@@ -1,8 +1,14 @@
 const cds = require("@sap/cds");
 
 module.exports = function () {
-  this.on("CREATE", "Reviews", async (req) => {
-    const { subject } = req.data;
+  this.after('CREATE', 'db.booknm.Reviews', async (req) => {
+    //const { subject } = req.data;
+    
+    console.log(req); // Check if req.data exists
+    if (!req.data) throw new Error("Missing data in request");
+    const { subject } = req.data?.subject;
+    console.log(subject); // Undefined if req.data is missing
+
     const tx = cds.transaction(req);
 
     // Calculate the average rating from the Reviews entity
